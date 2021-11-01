@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  common:
+  - apiVersion: v2
+    created: "2021-11-01T14:34:24.0660129-04:00"
+    description: Template chart
+    digest: b98407e51fb09846ffd6ecc6e5b8f5b3222658edf4c0a7b9af327b372b627a61
+    name: common
+    type: library
+    urls:
+    - common-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-11-01T14:34:24.0629835-04:00"
