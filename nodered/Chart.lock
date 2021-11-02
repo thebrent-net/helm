@@ -1,0 +1,6 @@
+dependencies:
+- name: common
+  repository: https://thebrent-net.github.io/helm/
+  version: 0.1.0
+digest: sha256:c7da271296968155f4f58e699aaca89c7e08c85cba7c78ca65dd2c08d272f0b6
+generated: "2021-11-02T13:59:09.8582864-04:00"

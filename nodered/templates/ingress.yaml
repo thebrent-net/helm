@@ -1,0 +1,3 @@
+{{- include "common.ingress" (list . "nodered.ingress") -}}
+{{- define "nodered.ingress" -}}
+{{- end -}}

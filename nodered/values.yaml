@@ -1,0 +1,48 @@
+nameOverride: ""
+#fullnameOverride: ""
+
+deployment:
+  image:
+    repository: nodered/node-red
+    pullPolicy: IfNotPresent
+  imagePullSecrets: []
+  ports:
+    - name: http
+      containerPort: 80
+      protocol: TCP
+environment:
+  - name: "FLOWS"
+    value: "flows.json"
+  - name: "NODE_OPTIONS"
+    value: 
+  - name: "NODE_RED_ENABLE_PROJECTS"
+    value: 
+  - name: "NODE_RED_ENABLE_SAFE_MODE"
+    value: 
+  - name: "TZ"
+    value: "UTC"
+
+
+certificate:
+  commonName: nodered.home.thebrent.net
+  hostnames:
+    - nodered.home.thebrent.net
+
+service:
+  type: ClusterIP
+  port: 1880
+
+ingress:
+  enabled: true
+  className: "public"
+  annotations: 
+    kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: nodered.home.thebrent.net
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: nodered-tls
+      hosts:
+        - nodered.home.thebrent.net

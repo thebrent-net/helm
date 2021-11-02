@@ -1,0 +1,3 @@
+{{- include "common.certificate" (list . "nodered.certificate") -}}
+{{- define "nodered.certificate" -}}
+{{- end -}}

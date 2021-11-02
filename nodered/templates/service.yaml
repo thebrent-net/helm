@@ -1,0 +1,3 @@
+{{- include "common.service" (list . "nodered.service") -}}
+{{- define "nodered.service" -}}
+{{- end -}}
