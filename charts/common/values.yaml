@@ -1,0 +1,10 @@
+global:
+  nameOverride:
+  fullnameOverride:
+
+name: 
+nameOverride:
+namespaceOrverride: 
+
+ingress:
+  enabled: true
