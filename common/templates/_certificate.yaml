@@ -12,7 +12,7 @@ spec:
     kind: ClusterIssuer
     name: letsencrypt
   commonName: {{ .Values.certificate.commonName }}
-  dnsNames: {{ .Values.certificate.hostNames }}
+  dnsNames: {{ .Values.certificate.hostnames }}
 {{- end -}}
 {{- define "common.certificate" -}}
 {{- include "common.util.merge" (append . "common.certificate.tpl") -}}
