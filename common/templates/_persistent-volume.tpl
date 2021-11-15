@@ -12,8 +12,8 @@ spec:
   accessModes:
     - ReadWriteOnce
   glusterfs:
-    endpointsNamespace: glusterfs
-    endpoints: glusterfs-storage
+    endpointsNamespace: {{ .Values.volume.endpointsNamespace }}
+    endpoints: {{ .Values.volume.endpoint }}
     path: {{ .Values.volume.storagePath }}
     readOnly: false
   persistentVolumeReclaimPolicy: Retain

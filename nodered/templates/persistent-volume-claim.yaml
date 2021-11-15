@@ -1,0 +1,3 @@
+{{- include "common.persistentVolumeClaim" (list . "nodered.persistentVolumeClaim") -}}
+{{- define "nodered.persistentVolumeClaim" -}}
+{{- end -}}

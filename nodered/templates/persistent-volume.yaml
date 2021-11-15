@@ -1,0 +1,3 @@
+{{- include "common.persistentVolume" (list . "nodered.persistentVolume") -}}
+{{- define "nodered.persistentVolume" -}}
+{{- end -}}

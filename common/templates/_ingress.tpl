@@ -31,7 +31,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: "name"
+                name: nodered
                 port:
                   number: {{ .port }}
           {{- end }}

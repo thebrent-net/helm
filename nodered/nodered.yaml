@@ -1,0 +1,168 @@
+---
+# Source: nodered/templates/persistent-volume.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  labels:
+    app.kubernetes.io/instance: nodered
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: nodered
+    app.kubernetes.io/version: 1.3.5
+    helm.sh/chart: nodered-0.1.0
+  name: nodered
+  namespace: default
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 20Gi
+  glusterfs:
+    endpoints: glusterfs
+    endpointsNamespace: glusterfs
+    path: k8s/nodered
+    readOnly: false
+  persistentVolumeReclaimPolicy: Retain
+---
+# Source: nodered/templates/persistent-volume-claim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app.kubernetes.io/instance: nodered
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: nodered
+    app.kubernetes.io/version: 1.3.5
+    helm.sh/chart: nodered-0.1.0
+  name: nodered
+  namespace: default
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: ""
+  volumeName: nodered
+---
+# Source: nodered/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: nodered
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: nodered
+    app.kubernetes.io/version: 1.3.5
+    helm.sh/chart: nodered-0.1.0
+  name: nodered
+spec:
+  ports:
+  - name: http
+    port: 1880
+    protocol: TCP
+    targetPort: http
+  selector:
+    app.kubernetes.io/instance: nodered
+    app.kubernetes.io/name: nodered
+  type: ClusterIP
+---
+# Source: nodered/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: nodered
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: nodered
+    app.kubernetes.io/version: 1.3.5
+    helm.sh/chart: nodered-0.1.0
+  name: nodered
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: nodered
+      app.kubernetes.io/name: nodered
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: nodered
+        app.kubernetes.io/name: nodered
+    spec:
+      containers:
+      - env:
+        - name: FLOWS
+          value: flows.json
+        - name: NODE_OPTIONS
+          value: null
+        - name: NODE_RED_ENABLE_PROJECTS
+          value: null
+        - name: NODE_RED_ENABLE_SAFE_MODE
+          value: null
+        - name: TZ
+          value: UTC
+        image: nodered/node-red:1.3.5
+        imagePullPolicy: IfNotPresent
+        name: nodered
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /data
+          name: data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: nodered
+---
+# Source: nodered/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
+  labels:
+    app.kubernetes.io/instance: nodered
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: nodered
+    app.kubernetes.io/version: 1.3.5
+    helm.sh/chart: nodered-0.1.0
+  name: nodered
+spec:
+  ingressClassName: public
+  rules:
+  - host: nodered.home.thebrent.net
+    http:
+      paths:
+      - backend:
+          service:
+            name: nodered
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - nodered.home.thebrent.net
+    secretName: nodered-tls
+---
+# Source: nodered/templates/certificate.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    app.kubernetes.io/instance: nodered
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: nodered
+    app.kubernetes.io/version: 1.3.5
+    helm.sh/chart: nodered-0.1.0
+  name: nodered
+  namespace: default
+spec:
+  commonName: nodered.home.thebrent.net
+  dnsNames:
+  - nodered.home.thebrent.net
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: nodered-tls

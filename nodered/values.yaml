@@ -42,7 +42,13 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
+          port: 80
   tls:
     - secretName: nodered-tls
       hosts:
         - nodered.home.thebrent.net
+        
+volume:
+  endpointsNamespace: glusterfs
+  endpoint: glusterfs
+  storagePath: "k8s/nodered"
